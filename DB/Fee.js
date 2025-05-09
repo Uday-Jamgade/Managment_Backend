@@ -10,7 +10,7 @@ const Fees = new mongoose.Schema({
         required:true
     },
      amount:{
-        type:String
+        type:Number
      },
      remark:{
         type:String

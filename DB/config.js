@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
+require('dotenv').config();
 
- mongoose.connect("mongodb://localhost:27017/Managment");
+// const url = process.env.DATABASE
 
+// mongoose.connect(`${url}`)
 
+mongoose.connect(`mongodb+srv://udayjamgade1:${process.env.PASSWORD}@cluster0.iblngby.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`)

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const student = require("../DB/Student")
+const fee = require("../DB/Fee")
 const jwt= require("jsonwebtoken");
 const {authenticateToken}=require("./UsersAuth");
 
@@ -58,5 +59,63 @@ try {
          res.status(500).json({message:"server Error"}); 
       }
          })
+
+         router.get("/get-studentdetail/:Studentid",authenticateToken,async (req,res)=>{
+            try {
+               const {Studentid}= req.params;
+               const students= await student.findById(Studentid);
+               if(students){
+                  const fees = await fee.find({Courseid:students.Courseid ,phone:students.phone})
+                
+                  return res.json({
+                     message:"200",
+                     data:students,
+                     payment: fees
+                  })
+               }
+
+            } catch (error) {
+               console.log("error",error)
+               res.status(500).json({message:"server Error"}); 
+            }
+               })
+
+      router.delete("/delete_student/:id",authenticateToken,async (req,res)=>{
+            try{
+             const {id} = req.params; 
+            
+             await student.findByIdAndDelete(id)
+        
+             return res.status(201).json({message:"Student deleted succesfully"});
+            } catch (error) {
+                console.log("error",error)
+               res.status(500).json({message:"server Error"}); 
+            }
+
+            })
+   router.put("/update_student/:id",authenticateToken,async (req,res)=>{
+       try{
+        const {id} = req.params; 
+        const {studentname,phone,email,address,imageurl,Courseid}= req.body;
+       
+   
+        await student.findByIdAndUpdate(id,{
+         studentname:studentname,
+         phone:phone,
+         email:email,
+         address:address,
+         Courseid:Courseid,
+         imageurl:imageurl,
+         uid:id
+        })
+   
+        return res.status(201).json({message:"Student update succesfully"});
+       } catch (error) {
+           console.log("error",error)
+          res.status(500).json({message:"server Error"}); 
+       }
+       })
+      
+      
 
    module.exports=router

@@ -5,6 +5,8 @@ const bcrypt= require("bcrypt");
 const jwt= require("jsonwebtoken");
 // const {authenticateToken}=require('./UserAuth')
 
+const {authenticateToken}=require("./UsersAuth");
+
 
 
 router.post("/sign-up" ,async (req,res)=>{
@@ -50,10 +52,10 @@ router.post("/sign-in" ,async (req,res)=>{
         if (!isMatch) {
             return res.status(401).json({ message: "Invalid Password" });
         }
-
+        const secrete = process.env.SECRET_JWT;
         const token = jwt.sign(
             { email: existingUser.email, role: existingUser.role },
-            "Managment123",
+            `${secrete}`,
             { expiresIn: "30d" }
         );
 
@@ -69,8 +71,10 @@ router.post("/sign-in" ,async (req,res)=>{
 })
 
 
-router.get("/get-all-user",async(req,res)=>{
-    const AllUser = await User.find();
+router.get("/get-user",authenticateToken, async(req,res)=>{
+    const {id}= req.headers
+    
+    const AllUser = await User.findById(id);
     // console.log(AllUser);
     res.json({
         message: "success",

@@ -46,17 +46,15 @@ try {
 }
    })
 
-   router.put("/detail-course/:id",authenticateToken,async (req,res)=>{
+   router.get("/detail-course/:id",authenticateToken,async (req,res)=>{
       try{
-       const {id} = req.params; 
-      
-  
-       console.log(id);
+       const {id} = req.params;
+        
 
       const course=await Course.findById(id);
 
        if(course){
-       StudentList = await Student.find(id)
+       StudentList = await Student.find({Courseid:id})
        }
 
        res.json({
@@ -64,8 +62,7 @@ try {
          data:course,
          students: StudentList
        })
-  
-  
+
       } catch (error) {
           console.log("error",error)
          res.status(500).json({message:"server Error"}); 
@@ -76,6 +73,7 @@ try {
 router.put("/update_course/:id",authenticateToken,async (req,res)=>{
     try{
      const {id} = req.params; 
+     const  {CourseName,price,desc,start_Date,end_Date,imageurl} = req.body ;
     
 
      console.log(id);
@@ -89,13 +87,14 @@ router.put("/update_course/:id",authenticateToken,async (req,res)=>{
         imageurl:imageurl
      })
 
-     return res.status(201).json({message:"Course add succesfully"});
+     return res.status(201).json({message:"Course update succesfully"});
     } catch (error) {
         console.log("error",error)
        res.status(500).json({message:"server Error"}); 
     }
     })
 
+    
     router.delete("/delete_course/:id",authenticateToken,async (req,res)=>{
       try{
        const {id} = req.params; 

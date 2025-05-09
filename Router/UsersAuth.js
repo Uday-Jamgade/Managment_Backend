@@ -6,8 +6,8 @@ const authenticateToken=(req,res,next)=>{
     if(token==null){
         return res.status(401).json({message: "Authentication Token required "});
     }
-
-    jwt.verify(token,"Managment123",(err,user)=>{
+    const secrete = process.env.SECRET_JWT;
+    jwt.verify(token,`${secrete}`,(err,user)=>{
      if(err){
         return res.status(403).json({
             message: "token expred "
