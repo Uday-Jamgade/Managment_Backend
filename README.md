@@ -38,8 +38,8 @@ This project is a full-stack Institute Management System built using React for t
 - MongoDB installed and running.
 
 ### Steps
-1. Clone the repository:
+<!-- 1. Clone the repository:
    ```bash
    git clone <repository-url>
-   cd Managment
+   cd Managment -->
    
